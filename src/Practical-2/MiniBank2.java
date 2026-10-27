@@ -1,4 +1,4 @@
-public class MiniBank {
+public class MiniBank2 {
 
     static class Customer {
         private String name;
@@ -97,9 +97,9 @@ public class MiniBank {
 
         Account[] accounts = new Account[3];
 
-        accounts[0] = new Account("Nandani", 1000);
-        accounts[1] = new Account("Hitanshi");
-        accounts[2] = new Account("Priya", 5000);
+        accounts[0] = new Account("Brinda", 1000);
+        accounts[1] = new Account("Riddhi");
+        accounts[2] = new Account("Drishti", 5000);
 
         accounts[0].deposit(500);
         accounts[0].withdraw(200);
