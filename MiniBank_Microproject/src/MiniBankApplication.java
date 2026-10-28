@@ -7,13 +7,8 @@ import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
-/*
- * MiniBank Microproject
- * Combines the Java concepts demonstrated in Practical 1 to Practical 13.
- */
 public class MiniBankApplication {
 
-    // Practical 7/13: custom annotations
     @Retention(RetentionPolicy.RUNTIME)
     @Target(ElementType.FIELD)
     @interface Id {}
@@ -26,7 +21,6 @@ public class MiniBankApplication {
     @Target(ElementType.FIELD)
     @interface MaxLength { int value(); }
 
-    // Practical 8/10/11/12/13: checked banking exceptions
     static class BankException extends Exception {
         BankException(String message) { super(message); }
     }
@@ -44,7 +38,6 @@ public class MiniBankApplication {
         InvalidAmountException(long amount) { super("Invalid amount: " + amount); }
     }
 
-    // Practical 3/4/5: customer, nested address, cloning
     static class Address implements Serializable {
         private String line;
         private String city;
@@ -108,7 +101,6 @@ public class MiniBankApplication {
         }
     }
 
-    // Practical 6/8/10: interfaces
     interface Transactable {
         void deposit(long amount) throws InvalidAmountException;
         boolean withdraw(long amount) throws BankException;
@@ -118,7 +110,6 @@ public class MiniBankApplication {
     interface WithdrawRule { boolean canWithdraw(long amount); }
     interface Premium { long getOverdraftLimit(); }
 
-    // Practical 5/6/8/9/10/11/12/13: abstract class and account inheritance
     static abstract class Account implements Transactable, InterestBearing, WithdrawRule,
             Comparable<Account>, Serializable {
         @Id
@@ -217,7 +208,6 @@ public class MiniBankApplication {
         @Override public boolean canWithdraw(long amount) { return false; }
     }
 
-    // Practical 4/5: enum, command parsing and statement formatting
     enum TransactionType { DEPOSIT, WITHDRAW, TRANSFER, BALANCE, EXIT }
 
     static class Command {
@@ -263,7 +253,6 @@ public class MiniBankApplication {
         }
     }
 
-    // Practical 7: reflection-based validation of custom annotations
     static class AnnotationValidator {
         static List<String> validate(Object object) {
             List<String> errors = new ArrayList<>();
@@ -292,14 +281,12 @@ public class MiniBankApplication {
         }
     }
 
-    // Practical 8: try-with-resources and AutoCloseable
     static class BankSession implements AutoCloseable {
         BankSession() { System.out.println("Bank session opened."); }
         void perform() { System.out.println("Session: operation performed."); }
         @Override public void close() { System.out.println("Bank session closed automatically."); }
     }
 
-    // Practical 11: generic repository using @Id and reflection
     static class Repository<T> {
         private final HashMap<String, T> items = new HashMap<>();
 
@@ -335,7 +322,6 @@ public class MiniBankApplication {
         }
     }
 
-    // Practical 11: file serialization, transaction logging and report generation
     static class StatePersister {
         static void save(List<Account> accounts, Path file) throws IOException {
             Files.createDirectories(file.getParent());
@@ -370,7 +356,6 @@ public class MiniBankApplication {
         }
     }
 
-    // Practical 9/10: Runnable, Thread, synchronized account operations
     static class AccountWorker implements Runnable {
         private final Account account;
         private final int times;
@@ -624,7 +609,7 @@ public class MiniBankApplication {
                 + Repository.average(balances));
         System.out.println("Sorted by balance (Comparator):");
         for (Account account : accounts) System.out.println(account);
-        Collections.sort(accounts); // Comparable sorts by account number
+        Collections.sort(accounts);
         System.out.println("Sorted by account number (Comparable):");
         for (Account account : accounts) System.out.println(account);
     }
