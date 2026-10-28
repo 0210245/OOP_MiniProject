@@ -21,26 +21,23 @@ The **MiniBank System** simulates core retail banking operations. It enables use
 
 
 OOP_MininProject/
-│
-├── MiniBank_Microproject/          # Final integrated production microproject
-│   └── src/                        # Production source code & compiled binaries
-│
-├── src/                            # Practical Lab Modules (1 through 13)
-│   ├── Practical-1/                # Basic menu interaction & metadata structures
-│   ├── Practical-2/                # Encapsulation & access modifiers
-│   ├── Practical-3/                # Component composition (Customer & Address)
-│   ├── Practical-4/                # Input validation framework
-│   ├── Practical-5/                # Inheritance hierarchy (Savings, Current, Fixed Deposit)
-│   ├── Practical-6/                # Interface contracts & behavior decoupling
-│   ├── Practical-7/                # Custom runtime annotations & reflection validation
-│   ├── Practical-8/                # Custom exception handling hierarchies
-│   ├── Practical-9/                # Thread concurrency & race conditions (UnsafeAccount)
-│   ├── Practical-10/               # Advanced thread synchronization & orchestration
-│   ├── Practical-11/               # Binary file I/O serialization & transaction logs
-│   ├── Practical-12/               # Modular data storage & transaction processing
-│   └── Practical-13/               # Full Repository pattern implementation & reporting
-│
-└── README.md                       # Project Documentation
+├── MiniBank_Microproject/ # Final integrated production microproject
+│   └── src/ # Production source code & compiled binaries
+├── src/ # Practical Lab Modules (1 through 13)
+│   ├── Practical-1/ # Basic menu interaction & metadata structures
+│   ├── Practical-2/ # Encapsulation & access modifiers
+│   ├── Practical-3/ # Component composition (Customer & Address)
+│   ├── Practical-4/ # Input validation framework
+│   ├── Practical-5/ # Inheritance hierarchy (Savings, Current, Fixed Deposit)
+│   ├── Practical-6/ # Interface contracts & behavior decoupling
+│   ├── Practical-7/ # Custom runtime annotations & reflection validation
+│   ├── Practical-8/ # Custom exception handling hierarchies
+│   ├── Practical-9/ # Thread concurrency & race conditions (UnsafeAccount)
+│   ├── Practical-10/ # Advanced thread synchronization & orchestration
+│   ├── Practical-11/ # Binary file I/O serialization & transaction logs
+│   ├── Practical-12/ # Modular data storage & transaction processing
+│   └── Practical-13/ # Full Repository pattern implementation & reporting
+└── README.md # Project Documentation
 
 Supported Account Types & Financial Rules
 Savings Account (SavingsAccount): Tailored for regular savings, enforcing minimum balance boundaries and variable interest calculations via InterestBearing.
