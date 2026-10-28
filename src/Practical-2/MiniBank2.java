@@ -36,8 +36,6 @@ public class MiniBank2 {
             return customerId;
         }
     }
-
-
     static class Account {
         private final String accountNumber;
         private String ownerName;

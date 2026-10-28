@@ -1,6 +1,6 @@
 import java.util.regex.Pattern;
 
-public class MiniBank {
+public class MiniBank5 {
     static class Customer implements Cloneable {
 
         private String name;
@@ -42,8 +42,6 @@ public class MiniBank {
         public Address getAddress() {
             return address;
         }
-
-        // Nested Address class
         public static class Address {
 
             private String line;
@@ -68,8 +66,6 @@ public class MiniBank {
                 return pincode;
             }
         }
-
-        // Clone method
         public Customer clone() {
             try {
                 return (Customer) super.clone();
@@ -79,7 +75,7 @@ public class MiniBank {
         }
     }
 
-    static class Account {
+    static abstract class Account {
 
         private final String accountNumber;
         private String ownerName;
@@ -109,13 +105,19 @@ public class MiniBank {
         }
 
         public boolean withdraw(long amount) {
-            if (balance >= amount) {
+
+            if (canWithdraw(amount)) {
                 balance = balance - amount;
                 return true;
             }
 
             return false;
         }
+
+        // Abstract methods
+        public abstract double interestRate();
+
+        public abstract boolean canWithdraw(long amount);
 
         public String getAccountNumber() {
             return accountNumber;
@@ -162,6 +164,63 @@ public class MiniBank {
         }
     }
 
+    static class SavingsAccount extends Account {
+
+        private long minBalance;
+
+        SavingsAccount(String ownerName, long balance, long minBalance) {
+            super(ownerName, balance);
+            this.minBalance = minBalance;
+        }
+
+        @Override
+        public double interestRate() {
+            return 4.0;
+        }
+
+        @Override
+        public boolean canWithdraw(long amount) {
+            return getBalance() - amount >= minBalance;
+        }
+    }
+
+    static class CurrentAccount extends Account {
+
+        private long overdraftLimit;
+
+        CurrentAccount(String ownerName, long balance, long overdraftLimit) {
+            super(ownerName, balance);
+            this.overdraftLimit = overdraftLimit;
+        }
+
+        @Override
+        public double interestRate() {
+            return 0.0;
+        }
+
+        @Override
+        public boolean canWithdraw(long amount) {
+            return getBalance() - amount >= -overdraftLimit;
+        }
+    }
+
+    static class FixedDepositAccount extends Account {
+
+        FixedDepositAccount(String ownerName, long balance) {
+            super(ownerName, balance);
+        }
+
+        @Override
+        public double interestRate() {
+            return 7.0;
+        }
+
+        @Override
+        public boolean canWithdraw(long amount) {
+            return false;
+        }
+    }
+
     static class Validator {
 
         private static final Pattern MOBILE =
@@ -175,7 +234,6 @@ public class MiniBank {
 
         private static final Pattern IFSC =
                 Pattern.compile("^[A-Z]{4}0[A-Z0-9]{6}$");
-
 
         public static boolean isValidMobile(String mobile) {
             return MOBILE.matcher(mobile).matches();
@@ -227,7 +285,6 @@ public class MiniBank {
             );
         }
     }
-
     static class StatementFormatter {
 
         public static String buildStatement(Account account) {
@@ -255,145 +312,134 @@ public class MiniBank {
     }
     public static void main(String[] args) {
 
+        // Account array containing different account types
         Account[] accounts = new Account[3];
 
-        accounts[0] = new Account("Nandani", 1000);
-        accounts[1] = new Account("Hitanshi");
-        accounts[2] = new Account("Priya", 5000);
+        accounts[0] =
+                new SavingsAccount("Nandani", 1000, 500);
 
-        accounts[0].deposit(500);
-        accounts[0].withdraw(200);
+        accounts[1] =
+                new CurrentAccount("Hitanshi", 1000, 2000);
 
-        accounts[1].deposit(2000);
-        accounts[1].withdraw(500);
+        accounts[2] =
+                new FixedDepositAccount("Priya", 5000);
 
-        accounts[2].withdraw(1000);
-        accounts[2].deposit(500);
 
-        System.out.println("----- Accounts -----");
+        // ================= POLYMORPHISM =================
+
+        System.out.println("----- Accounts and Interest Rates -----");
 
         for (Account account : accounts) {
+
             System.out.println(account);
+
+            System.out.println(
+                    "Interest Rate: "
+                            + account.interestRate()
+                            + "%"
+            );
+
+            System.out.println();
+        }
+        System.out.println("----- Withdrawal Testing -----");
+
+        System.out.println(
+                "Savings withdrawal: "
+                        + accounts[0].withdraw(400)
+        );
+
+        System.out.println(
+                "Savings balance: "
+                        + accounts[0].getBalance()
+        );
+
+
+        System.out.println(
+                "Current withdrawal: "
+                        + accounts[1].withdraw(2500)
+        );
+
+        System.out.println(
+                "Current balance: "
+                        + accounts[1].getBalance()
+        );
+
+
+        System.out.println(
+                "Fixed Deposit withdrawal: "
+                        + accounts[2].withdraw(1000)
+        );
+
+        System.out.println(
+                "Fixed Deposit balance: "
+                        + accounts[2].getBalance()
+        );
+        System.out.println("\n----- instanceof Pattern Test -----");
+
+        if (accounts[0] instanceof SavingsAccount savings) {
+
+            System.out.println(
+                    "Savings Account detected."
+            );
+
+            System.out.println(
+                    "Interest Rate: "
+                            + savings.interestRate()
+                            + "%"
+            );
         }
 
         System.out.println("\n----- Account Comparison -----");
 
-        System.out.println(
-                "Account 1 equals Account 2: "
-                        + accounts[0].equals(accounts[1])
-        );
-
-        System.out.println("\n----- instanceof Test -----");
-
-        if (accounts[0] instanceof Account) {
-            System.out.println("accounts[0] is an Account");
-        }
+        System.out.println("Account 1 equals Account 2: " + accounts[0].equals(accounts[1]));
 
         System.out.println("\n----- Validator Testing -----");
 
-        System.out.println(
-                "Valid Mobile: "
-                        + Validator.isValidMobile("9876543210")
-        );
+        System.out.println("Valid Mobile: " + Validator.isValidMobile("9876543210"));
 
-        System.out.println(
-                "Invalid Mobile: "
-                        + Validator.isValidMobile("12345")
-        );
+        System.out.println("Invalid Mobile: " + Validator.isValidMobile("12345"));
 
-        System.out.println(
-                "Valid Email: "
-                        + Validator.isValidEmail("test@gmail.com")
-        );
+        System.out.println("Valid Email: " + Validator.isValidEmail("test@gmail.com"));
 
-        System.out.println(
-                "Invalid Email: "
-                        + Validator.isValidEmail("test@gmail")
-        );
+        System.out.println("Invalid Email: " + Validator.isValidEmail("test@gmail"));
 
-        System.out.println(
-                "Valid PAN: "
-                        + Validator.isValidPan("ABCDE1234F")
-        );
+        System.out.println("Valid PAN: " + Validator.isValidPan("ABCDE1234F"));
 
-        System.out.println(
-                "Invalid PAN: "
-                        + Validator.isValidPan("ABC123")
-        );
+        System.out.println("Invalid PAN: " + Validator.isValidPan("ABC123"));
 
-        System.out.println(
-                "Valid IFSC: "
-                        + Validator.isValidIfsc("SBIN0001234")
-        );
+        System.out.println("Valid IFSC: " + Validator.isValidIfsc("SBIN0001234"));
 
-        System.out.println(
-                "Invalid IFSC: "
-                        + Validator.isValidIfsc("SB123")
-        );
+        System.out.println("Invalid IFSC: " + Validator.isValidIfsc("SB123"));
 
         System.out.println("\n----- Command Testing -----");
 
-        Command command =
-                CommandParser.parse("DEPOSIT AC0001 500");
+        Command command = CommandParser.parse("DEPOSIT AC0001 500");
 
         System.out.println("Type: " + command.type());
-        System.out.println(
-                "Account Number: " + command.accountNumber()
-        );
-        System.out.println("Amount: " + command.amount());
+
+        System.out.println("Account Number: " + command.accountNumber());
+
+        System.out.println( "Amount: " + command.amount());
 
         System.out.println("\n----- Statement -----");
 
-        System.out.println(
-                StatementFormatter.buildStatement(accounts[0])
-        );
+        System.out.println(StatementFormatter.buildStatement(accounts[0]));
 
         System.out.println("\n----- Customer Testing -----");
 
-        Customer customer =
-                new Customer(
-                        "Nandani",
-                        "nandani@gmail.com",
-                        "9876543210"
-                );
+        Customer customer =new Customer("Nandani","nandani@gmail.com","9876543210");
 
-        Customer.Address address =
-                new Customer.Address(
-                        "ABC Road",
-                        "Anand",
-                        "388001"
-                );
+        Customer.Address address = new Customer.Address("ABC Road", "Anand", "388001");
 
-        System.out.println(
-                "Customer ID: "
-                        + customer.getCustomerId()
-        );
+        System.out.println("Customer ID: " + customer.getCustomerId());
 
-        System.out.println(
-                "Name: "
-                        + customer.getName()
-        );
+        System.out.println("Name: " + customer.getName());
 
-        System.out.println(
-                "Email: "
-                        + customer.getEmail()
-        );
+        System.out.println("Email: " + customer.getEmail());
 
-        System.out.println(
-                "Mobile: "
-                        + customer.getMobile()
-        );
-
-        System.out.println(
-                "Address: "
-                        + address.getLine()
-                        + ", "
-                        + address.getCity()
-                        + ", "
-                        + address.getPincode()
-        );
+        System.out.println("Mobile: " + customer.getMobile() );
+        System.out.println("Address: " + address.getLine() + ", " + address.getCity() + ", " + address.getPincode());
         Customer copy = customer.clone();
-
         System.out.println(
                 "Cloned Customer ID: "
                         + copy.getCustomerId()

@@ -1,4 +1,3 @@
-//package Practical3;
 public class MiniBank3{
     static class Customer implements Cloneable {
         private String name;
