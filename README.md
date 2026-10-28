@@ -19,7 +19,7 @@ The **MiniBank System** simulates core retail banking operations. It enables use
 
 ## Repository Structure
 
-
+```text
 OOP_MininProject/
 ├── MiniBank_Microproject/ # Final integrated production microproject
 │   └── src/ # Production source code & compiled binaries
@@ -38,7 +38,7 @@ OOP_MininProject/
 │   ├── Practical-12/ # Modular data storage & transaction processing
 │   └── Practical-13/ # Full Repository pattern implementation & reporting
 └── README.md # Project Documentation
-
+```
 Supported Account Types & Financial Rules
 Savings Account (SavingsAccount): Tailored for regular savings, enforcing minimum balance boundaries and variable interest calculations via InterestBearing.
 
